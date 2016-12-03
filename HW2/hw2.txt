@@ -1,0 +1,64 @@
+This assignment was very difficult in most part because of the jargon that
+comes along with working with grammars. However, after carefully perusing 
+the spec a few times, I named my variables very specifically so that keeping
+track of where I was, when I needed to think about where I was in the parse 
+tree when recursing, would be easier. 
+
+The biggest obstacle was knowing where to start. I had an idea of what I wanted
+to do, which was similar to the bottom-up processing I did in Homework 1 in 
+the filter_blind_alleys function. However, I was thoroughly lost because
+I was confused of what to return, and what exactly the acceptor function was
+doing behind the scene. I figured out that the acceptor simply returns a 
+derivation depending on the type of acceptor function (we didn't have to 
+write our own). 
+
+With that out of the way, I tried writing a helper function to scan the 
+alternative list that we generated in Part I of this assignment. But soon, 
+I got stuck again. I knew that as I scanned the alternative list, I would 
+need to examine the specific right hand sides of the rule, and see if they 
+matched parts of the fragment. However, it seemed like I had two conflicting
+tasks at hand - One where I needed to scan a larger alternative list, and 
+one where I was examining specific right hand sides. This led me to believe
+that instead of delegating all the work to one single function, I needed to 
+create another function. 
+
+I made this other function to scan specific right-hand sides. Although the
+pieces were starting to come together, I still had a problem in calling 
+both functions asynchronously, because depending on conditions, one would
+need to call the other. After doing some research, I realized in OCaml, 
+having two recursive functions that rely on each other is called mutual 
+recursion, so I needed to integrate this feature into my solution. 
+
+I think that was the biggest hurdle that I needed to cross. After defining
+two methods to recurse, I had the foundation for a solution. One function, 
+scan_rule, specifically checks the fragment against the rhs provided. 
+I designed it this way because it was the easiest to picture. An improvement
+I discovered that slightly prunes the recursion tree was to check first
+if the fragment was empty, and the rhs was not. This means that the rule 
+is not a possible match, and we have to backtrack and try something else. 
+Only then should I continue resolving the rhs, and see if the right hand 
+side matches up with the fragment. 
+
+Finally, the scan_alternative_list method is the counterpart to the scan_rule
+method. The scan_alternative_list function manually checks all possible 
+rules that stem from the start expression for the grammar, and its return 
+value is that of scan_rule, which in turn is the return value of the 
+acceptor passed into both functions. 
+
+To summarize, the central obstacle I faced in writing parse_prefix was piecing
+together the pieces, and deciding what arguments were necessary because the 
+structure necessary was inherently a mutually recursive one. Breaking the 
+problem into two parts, one to scan the larger list, and one to go through 
+all ways of breaking a nonterminal symbol and compariing these deduced terminal
+symbols with the terminal symbosl in the fragment, made the process of writing
+working code much easier. 
+
+My solution takes a considerable amount of time for test4 in the sample test 
+cases in the homework spec. This is due to the exponential ways the recursion
+can branch once the number of symbols and rules rise to a considerable values. 
+My solution also assumes that no blind alleys exist. If they do, there is a 
+risk of infinite recursion within the scan_rule method, because it 
+repetitively attempts to decode a nonterminal into a terminal, so if "cycle" 
+of nonterminals exist, it will never exit. 
+
+

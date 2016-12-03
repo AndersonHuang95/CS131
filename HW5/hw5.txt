@@ -1,0 +1,33 @@
+All functions assume valid input, so implementations do not 
+check all edge cases or for all errors. Specifically, every function 
+that accepts a listdiff is assumed to be a valid listdiff (it exists).
+All procedures attempt to use tail-call recursion, if applicable.  
+
+(null-ld? obj) => no known deficiencies 
+
+(listdiff? obj => no known deficiencies 
+
+(cons-ld obj listdiff) => assumes valid listdiff argument
+
+(car-ld listdiff) => assumes listdiff is valid and is not empty
+if this is not true, then even if listdiff is not valid, it will
+return the first element in (car listdiff) 
+
+(cdr-ld listdiff) => assumes listdiff is valid and is not empty 
+
+(listdiff obj ...) => no known deficiencies 
+
+(length-ld listdiff) => assumes well-formed listdiff; for example, 
+if (car listdiff) is an improper list, and (cdr listdiff) is empty, or
+has no elements in (car listdiff), length-ld will error out 
+
+(append-ld listdiff ...) => assumes each listdiff is valid, handles
+empty listdiffs correctly 
+
+(assq-ld obj alistdiff) => assumes alistdiff is validly formatted
+
+(list->listdiff list) => no known deficiencies
+
+(listdiff->list listdiff) => assumes listdiff is valid
+
+(expr-returning listdiff) => uses quasiquotes and unquotes; does not use macros
