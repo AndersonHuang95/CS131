@@ -1,4 +1,4 @@
-#1/usr/bin/env python 
+#!/usr/bin/env python 
 
 # CS131 Python Project 
 
